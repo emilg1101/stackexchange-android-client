@@ -6,11 +6,9 @@
 
     <TextView
         android:id="@+id/sort"
+        style="@style/Text.Toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/alegreya_sans_sc_extrabold"
-        android:textSize="18sp"
-        android:textColor="#000"/>
+        android:layout_margin="10dp" />
 
 </LinearLayout>

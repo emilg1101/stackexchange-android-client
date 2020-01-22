@@ -3,4 +3,9 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#000000</color>
+
+    <color name="defaultTextColor">#232F34</color>
+
+    <color name="colorChipPrimary">#eff1f4</color>
+    <color name="colorChipPrimaryChecked">#d7d8db</color>
 </resources>
