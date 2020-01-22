@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--<com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleTextAppearance="?attr/textAppearanceHeadline6"
+                app:expandedTitleGravity="bottom"
+                app:expandedTitleMarginBottom="24dp"
+                app:expandedTitleMarginStart="16dp"
+                app:expandedTitleTextAppearance="?attr/textAppearanceHeadline5"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">-->
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    android:theme="@style/ToolbarTheme"/>
+            <!--</com.google.android.material.appbar.CollapsingToolbarLayout>-->
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:goneUnless="@{viewmodel.progress}" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
