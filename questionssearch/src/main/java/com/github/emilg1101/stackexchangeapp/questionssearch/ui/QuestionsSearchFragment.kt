@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseFragment
-import com.github.emilg1101.stackexchangeapp.core.ui.base.NavigationActivity
+import com.github.emilg1101.stackexchangeapp.core.ui.base.AppActivity
 import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
 import com.github.emilg1101.stackexchangeapp.domain.repository.TagsRepository
 import com.github.emilg1101.stackexchangeapp.questionssearch.R
@@ -34,6 +34,7 @@ class QuestionsSearchFragment :
     }
 
     private var sortAdapter: SortSpinnerAdapter? = null
+    private var spinnerPosition = -1
 
     private val onItemSelected = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(
@@ -42,9 +43,10 @@ class QuestionsSearchFragment :
             position: Int,
             id: Long
         ) {
-            if (sortAdapter == null) {
+            if (spinnerPosition != position) {
                 viewModel.changeSort(Sort(parent?.adapter?.getItem(position).toString().toLowerCase()))
             }
+            spinnerPosition = position
             initAdapter()
         }
 
@@ -76,8 +78,8 @@ class QuestionsSearchFragment :
         spinner.adapter = sortAdapter
         spinner.onItemSelectedListener = onItemSelected
 
-        (activity as? NavigationActivity)?.setToolbar(toolbar)
-        (activity as? NavigationActivity)?.supportActionBar?.setDisplayShowTitleEnabled(false)
+        (activity as? AppActivity)?.setToolbar(toolbar)
+        (activity as? AppActivity)?.supportActionBar?.setDisplayShowTitleEnabled(false)
 
         viewModel.tagsLiveData.observe(viewLifecycleOwner) { tags ->
             tags.map {
@@ -118,6 +120,6 @@ class QuestionsSearchViewModelFactory(
         ) as T
 }
 
-inline class Sort(val sort: String)
+class Sort(var sort: String)
 
 val HotSort = Sort("hot")

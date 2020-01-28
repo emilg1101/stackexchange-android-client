@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 
-abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: Int) :
-    Fragment(containerId) {
+abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: Int) : Fragment(containerId) {
 
     protected abstract val viewModel: BaseViewModel
 
@@ -37,5 +37,9 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
                 Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun setToolbar(toolbar: Toolbar) {
+        (activity as? AppActivity)?.setToolbar(toolbar)
     }
 }

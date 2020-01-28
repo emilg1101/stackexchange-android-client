@@ -8,4 +8,6 @@
 
     <color name="colorChipPrimary">#232F34</color>
     <color name="colorChipPrimaryChecked">#182024</color>
+
+    <color name="colorDefaultWindowBackground">#080b0c</color>
 </resources>

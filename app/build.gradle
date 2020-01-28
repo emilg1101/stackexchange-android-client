@@ -26,9 +26,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -40,6 +45,9 @@ dependencies {
 
     implementation project(':questionssearch')
     implementation project(':questiondetails')
+    implementation project(':profiledetails')
+    implementation project(':authorization')
+    implementation project(':notifications')
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

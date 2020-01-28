@@ -1,5 +1,6 @@
 package com.github.emilg1101.stackexchangeapp.data.api
 
+import com.github.emilg1101.stackexchangeapp.data.api.entity.AnswersResultEntity
 import com.github.emilg1101.stackexchangeapp.data.api.entity.QuestionsResultEntity
 import com.github.emilg1101.stackexchangeapp.data.api.entity.TagsResultEntity
 import retrofit2.http.GET
@@ -31,4 +32,12 @@ interface StackExchangeService {
         @Path("questionId") questionId: Int,
         @Query("site") site: String = "stackoverflow"
     ): QuestionsResultEntity
+
+    @GET("2.2/questions/{questionId}/answers?filter=!b1MMEr*sp(_YJ1")
+    suspend fun getQuestionAnswers(
+        @Path("questionId") questionId: Int,
+        @Query("page") page: Int,
+        @Query("pagesize") pageSize: Int = 10,
+        @Query("site") site: String = "stackoverflow"
+    ): AnswersResultEntity
 }

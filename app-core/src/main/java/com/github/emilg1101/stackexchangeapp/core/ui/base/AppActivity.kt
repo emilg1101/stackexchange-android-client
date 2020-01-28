@@ -5,13 +5,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 
-abstract class NavigationActivity : AppCompatActivity() {
+abstract class AppActivity : AppCompatActivity() {
 
-    abstract val navController: NavController
+    var navController: NavController? = null
 
     fun setToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
-        setupActionBarWithNavController(navController)
-        toolbar.setNavigationOnClickListener { navController.popBackStack() }
+        toolbar.setNavigationOnClickListener { navController?.popBackStack() }
+        navController?.let { setupActionBarWithNavController(it) }
     }
 }

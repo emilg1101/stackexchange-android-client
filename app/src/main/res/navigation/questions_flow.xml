@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/questionsSearch">
+    app:startDestination="@+id/questionsSearch"
+    android:id="@+id/questions_flow">
 
     <fragment
         android:id="@+id/questionsSearch"
         android:name="com.github.emilg1101.stackexchangeapp.questionssearch.ui.QuestionsSearchFragment"
-        android:label="Questions Search"
         tools:layout="@layout/fragment_questions_search">
         <action
             android:id="@+id/action_questionsSearch_to_questionDetails"
@@ -17,6 +17,5 @@
     <fragment
         android:id="@+id/questionDetails"
         android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsFragment"
-        android:label="Question details"
         tools:layout="@layout/fragment_question_details" />
 </navigation>

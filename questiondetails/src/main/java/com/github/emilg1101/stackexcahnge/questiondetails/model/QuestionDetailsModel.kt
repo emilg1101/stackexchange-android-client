@@ -8,7 +8,8 @@ data class QuestionDetailsModel(
     val ownerImage: String,
     val ownerName: String,
     val tags: List<String>,
-    val markdown: String
+    val markdown: String,
+    val answerCount: Int
 )
 
 val QuestionDetailsModelMapper: suspend (Question) -> QuestionDetailsModel = { question ->
@@ -18,6 +19,7 @@ val QuestionDetailsModelMapper: suspend (Question) -> QuestionDetailsModel = { q
         question.owner.profileImage,
         question.owner.name,
         question.tags,
-        question.markdown
+        question.markdown,
+        question.answerCount
     )
 }

@@ -12,7 +12,9 @@ class QuestionEntity(
     @field:SerializedName("title")
     val title: String,
     @field:SerializedName("body_markdown")
-    val markdown: String?
+    val markdown: String?,
+    @field:SerializedName("answer_count")
+    val answerCount: Int = 0
 ) {
     @field:SerializedName("tags")
     val tags: List<String> = listOf()
@@ -22,7 +24,8 @@ val QuestionEntityMapper: (QuestionEntity) -> Question = { entity ->
     Question(
         entity.questionId,
         Owner(entity.owner.profileImage, entity.owner.displayName),
-        entity.title
+        entity.title,
+        entity.answerCount
     ).apply {
         tags = entity.tags
         markdown = entity.markdown.toString()

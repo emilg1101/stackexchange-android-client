@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/authorizationFragment"
+    android:id="@+id/account_flow">
+
+    <fragment
+        android:id="@+id/authorizationFragment"
+        android:name="com.github.emilg1101.stackexchangeapp.authorization.ui.AuthorizationFragment"
+        android:label="Authorization"
+        tools:layout="@layout/fragment_authorization">
+        <action
+            android:id="@+id/action_authorizationFragment_to_profileDetails"
+            app:destination="@id/profileDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileDetails"
+        android:name="com.github.emilg1101.stackexchangeapp.profiledetails.ui.ProfileDetailsFragment"
+        android:label="Profile Details"
+        tools:layout="@layout/fragment_profile_details"/>
+</navigation>

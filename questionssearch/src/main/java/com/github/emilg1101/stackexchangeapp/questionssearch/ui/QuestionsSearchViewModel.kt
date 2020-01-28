@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.Executors
 
 class QuestionsSearchViewModel internal constructor(
-    questionsRepository: QuestionsRepository,
+    private val questionsRepository: QuestionsRepository,
     tagsRepository: TagsRepository,
     private val questionsSearchNavigation: QuestionsSearchNavigation
 ) : BaseViewModel(), DataSourceStateCallback {
@@ -43,8 +43,7 @@ class QuestionsSearchViewModel internal constructor(
     val empty: LiveData<Boolean>
         get() = _empty
 
-    private val questionsDataSourceFactory =
-        QuestionsDataSourceFactory(questionsRepository, viewModelScope, sort, tags, this)
+    private val questionsDataSourceFactory = QuestionsDataSourceFactory(questionsRepository, viewModelScope, sort, tags, this)
 
     private var config = PagedList.Config.Builder()
         .setEnablePlaceholders(false)
@@ -77,7 +76,7 @@ class QuestionsSearchViewModel internal constructor(
     }
 
     fun changeSort(sort: Sort) {
-        this.sort = sort
+        this.sort.sort = sort.sort
         pagedListLiveData = livePagedListBuilder.build()
     }
 

@@ -1,2 +1,2 @@
-include ':app', ':app-core', ':domain', ':questionssearch', ':data', ':questiondetails'
+include ':app', ':app-core', ':domain', ':questionssearch', ':data', ':questiondetails', ':profiledetails', ':authorization', ':notifications'
 rootProject.name='StackExchangeProject'
