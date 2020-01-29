@@ -17,5 +17,14 @@
     <fragment
         android:id="@+id/questionDetails"
         android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsFragment"
-        tools:layout="@layout/fragment_question_details" />
+        tools:layout="@layout/fragment_question_details" >
+        <action
+            android:id="@+id/action_questionDetails_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.github.emilg1101.stackexchangeapp.comments.ui.CommentsFragment"
+        android:label="Comments"
+        tools:layout="@layout/fragment_comments"/>
 </navigation>

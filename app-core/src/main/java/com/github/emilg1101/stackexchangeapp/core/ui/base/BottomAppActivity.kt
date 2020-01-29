@@ -9,7 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BottomAppActivity : AppActivity() {
 
-    abstract val bottomNavigationView: BottomNavigationView
+    abstract val bottomNavigationView: BottomNavigationView?
 
     abstract val containerId: Int
 
@@ -18,23 +18,23 @@ abstract class BottomAppActivity : AppActivity() {
     private var currentNavController: LiveData<NavController>? = null
 
     fun showBottomNavigation() {
-        bottomNavigationView.visibility = View.VISIBLE
+        bottomNavigationView?.visibility = View.VISIBLE
     }
 
     fun hideBottomNavigation() {
-        bottomNavigationView.visibility = View.GONE
+        bottomNavigationView?.visibility = View.GONE
     }
 
     fun setupBottomNavigationBar() {
 
-        val controller = bottomNavigationView.setupWithNavController(
+        val controller = bottomNavigationView?.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
             containerId = containerId,
             intent = intent
         )
 
-        controller.observe(this, Observer { navController ->
+        controller?.observe(this, Observer { navController ->
             this.navController = navController
             onNavController(navController)
         })

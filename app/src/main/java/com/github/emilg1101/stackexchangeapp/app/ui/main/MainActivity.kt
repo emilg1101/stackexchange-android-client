@@ -1,6 +1,9 @@
 package com.github.emilg1101.stackexchangeapp.app.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.github.emilg1101.stackexchangeapp.R
@@ -13,17 +16,25 @@ class MainActivity : BottomAppActivity() {
 
     private val mainNavigator: MainNavigator by inject { mainComponent.navigator }
 
+    private val viewModel: MainViewModel by viewModels { mainComponent.provideMainViewModelFactory() }
+
     override val navGraphIds: List<Int> = listOf(R.navigation.questions_flow, R.navigation.notifications_flow, R.navigation.account_flow)
 
     override val containerId: Int = R.id.my_nav_host_fragment
 
-    override val bottomNavigationView: BottomNavigationView
+    override val bottomNavigationView: BottomNavigationView?
         get() = findViewById(R.id.bottom_nav)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // AppInjector.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (savedInstanceState == null) {
+            setupBottomNavigationBar()
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
         setupBottomNavigationBar()
     }
 
@@ -40,4 +51,11 @@ class MainActivity : BottomAppActivity() {
     override fun onBackPressed() {
         if (navController?.navigateUp() == false) super.onBackPressed()
     }
+}
+
+class MainViewModelFactory : ViewModelProvider.NewInstanceFactory() {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+        MainViewModel() as T
 }

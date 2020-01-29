@@ -3,12 +3,14 @@ package com.github.emilg1101.stackexchangeapp.app.di
 import android.app.Application
 import com.github.emilg1101.stackexcahnge.questiondetails.di.QuestionDetailsComponent
 import com.github.emilg1101.stackexchangeapp.app.di.module.AuthorizationModule
+import com.github.emilg1101.stackexchangeapp.app.di.module.CommentsModule
 import com.github.emilg1101.stackexchangeapp.app.di.module.NotificationsModule
 import com.github.emilg1101.stackexchangeapp.app.di.module.ProfileDetailsModule
 import com.github.emilg1101.stackexchangeapp.app.di.module.QuestionDetailsModule
 import com.github.emilg1101.stackexchangeapp.app.di.module.QuestionsSearchModule
 import com.github.emilg1101.stackexchangeapp.app.ui.main.MainComponent
 import com.github.emilg1101.stackexchangeapp.authorization.di.AuthorizationComponent
+import com.github.emilg1101.stackexchangeapp.comments.di.CommentsComponent
 import com.github.emilg1101.stackexchangeapp.data.di.DataComponent
 import com.github.emilg1101.stackexchangeapp.notifications.di.NotificationsComponent
 import com.github.emilg1101.stackexchangeapp.profiledetails.di.ProfileDetailsComponent
@@ -25,10 +27,11 @@ object AppInjector {
         dataComponent = DataComponent.create(appComponent.context)
         mainComponent = MainComponent.create()
         QuestionsSearchComponent.instance = QuestionsSearchModule(appComponent, dataComponent, mainComponent)
-        QuestionDetailsComponent.instance = QuestionDetailsModule(dataComponent)
+        QuestionDetailsComponent.instance = QuestionDetailsModule(dataComponent, mainComponent)
         ProfileDetailsComponent.instance = ProfileDetailsModule()
         AuthorizationComponent.instance = AuthorizationModule(mainComponent)
         NotificationsComponent.instance = NotificationsModule()
+        CommentsComponent.instance = CommentsModule()
     }
 }
 
