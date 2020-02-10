@@ -54,7 +54,13 @@ dependencies {
     api androidLibs.navigationFragment
     api androidLibs.navigationUI
 
+    implementation glideLibs.glide
+
+    kapt glideLibs.compiler
+
     kapt androidLibs.bindingCompiler
+
+    implementation markdown_libraries
 
     testImplementation testLibs
     androidTestImplementation androidTestLibs

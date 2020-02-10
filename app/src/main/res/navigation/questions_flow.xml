@@ -2,13 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/questionsSearch"
-    android:id="@+id/questions_flow">
+    android:id="@+id/questions_flow"
+    app:startDestination="@+id/questionsSearch">
 
     <fragment
         android:id="@+id/questionsSearch"
-        android:name="com.github.emilg1101.stackexchangeapp.questionssearch.ui.QuestionsSearchFragment"
-        tools:layout="@layout/fragment_questions_search">
+        android:name="com.github.emilg1101.stackexchangeapp.questions.ui.QuestionsSearchFragment"
+        android:label="Discover"
+        tools:layout="@layout/fragment_questions">
         <action
             android:id="@+id/action_questionsSearch_to_questionDetails"
             app:destination="@id/questionDetails" />
@@ -16,15 +17,23 @@
 
     <fragment
         android:id="@+id/questionDetails"
-        android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsFragment"
-        tools:layout="@layout/fragment_question_details" >
+        android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsFragment"
+        tools:layout="@layout/fragment_question_details">
         <action
             android:id="@+id/action_questionDetails_to_commentsFragment"
             app:destination="@id/commentsFragment" />
+        <action
+            android:id="@+id/action_questionDetails_to_answerDetailsFragment"
+            app:destination="@id/answerDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
-        android:name="com.github.emilg1101.stackexchangeapp.comments.ui.CommentsFragment"
+        android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.comments.CommentsFragment"
         android:label="Comments"
-        tools:layout="@layout/fragment_comments"/>
+        tools:layout="@layout/fragment_comments" />
+    <fragment
+        android:id="@+id/answerDetailsFragment"
+        android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.answer.AnswerDetailsFragment"
+        android:label="Answer"
+        tools:layout="@layout/fragment_answer_details"/>
 </navigation>

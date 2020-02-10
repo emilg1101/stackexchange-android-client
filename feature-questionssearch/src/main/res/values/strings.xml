@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Questions Search</string>
-    <string-array name="sort_types">
-        <item>Hot</item>
-        <item>Week</item>
-        <item>Month</item>
-    </string-array>
-</resources>

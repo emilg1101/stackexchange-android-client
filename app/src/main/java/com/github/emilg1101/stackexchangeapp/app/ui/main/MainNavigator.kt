@@ -2,12 +2,13 @@ package com.github.emilg1101.stackexchangeapp.app.ui.main
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsNavigation
+import com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsNavigation
 import com.github.emilg1101.stackexchangeapp.R
 import com.github.emilg1101.stackexchangeapp.authorization.ui.AuthorizationNavigation
-import com.github.emilg1101.stackexchangeapp.questionssearch.ui.QuestionsSearchNavigation
+import com.github.emilg1101.stackexchangeapp.questions.ui.QuestionsNavigation
 
-class MainNavigator : QuestionsSearchNavigation, AuthorizationNavigation, QuestionDetailsNavigation {
+class MainNavigator : QuestionsNavigation, AuthorizationNavigation,
+    QuestionDetailsNavigation {
 
     var navController: NavController? = null
 
@@ -20,6 +21,10 @@ class MainNavigator : QuestionsSearchNavigation, AuthorizationNavigation, Questi
     }
 
     override fun openQuestionComments(questionId: Int) {
-        navController?.navigate(R.id.action_questionDetails_to_commentsFragment, bundleOf("QUESTION_ID" to questionId))
+        navController?.navigate(R.id.action_questionDetails_to_commentsFragment, bundleOf("POST_ID" to questionId))
+    }
+
+    override fun openAnswer(answerId: Int) {
+        navController?.navigate(R.id.action_questionDetails_to_answerDetailsFragment, bundleOf("ANSWER_ID" to answerId))
     }
 }

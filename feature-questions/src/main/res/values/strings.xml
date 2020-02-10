@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Questions Search</string>
+    <string name="questions_no_questions">No questions</string>
+    <string name="filter_hot_sort">hot</string>
+    <string name="filter_week_sort">week</string>
+    <string name="filter_month_sort">month</string>
+    <string name="filter_label_tags">Tags</string>
+    <string-array name="sort_types">
+        <item>Hot</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+</resources>

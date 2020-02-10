@@ -1,41 +1,40 @@
 package com.github.emilg1101.stackexcahnge.questiondetails.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.emilg1101.stackexcahnge.questiondetails.R
+import com.github.emilg1101.stackexcahnge.questiondetails.databinding.ItemAnswerBinding
 import com.github.emilg1101.stackexcahnge.questiondetails.model.AnswerItemModel
-import com.github.rjeschke.txtmark.Processor
-import kotlinx.android.synthetic.main.item_answer.view.*
 
 class AnswersPagingAdapter :
     PagedListAdapter<AnswerItemModel, AnswersPagingAdapter.AnswerItemViewHolder>(
         QUESTION_ITEM_COMPARATOR
     ) {
 
+    var onCommentClick: ((AnswerItemModel) -> Unit)? = null
+    var onAnswerClick: ((AnswerItemModel) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnswerItemViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_answer, parent, false)
-        return AnswerItemViewHolder(view)
+        val binding = DataBindingUtil.inflate<ItemAnswerBinding>(LayoutInflater.from(parent.context), R.layout.item_answer, parent, false)
+        return AnswerItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AnswerItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 
-    inner class AnswerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: AnswerItemModel?) = with(itemView) {
-            body.loadData(Processor.process(item?.body), "text/html", "UTF-8")
-            image_checked.visibility = if (item?.accepted == true) View.VISIBLE else View.GONE
-            Glide.with(context)
-                .load(item?.ownerImage)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(image_owner)
+    inner class AnswerItemViewHolder(private val binding: ItemAnswerBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: AnswerItemModel) = with(binding) {
+            itemModel = item
+            profile.setOnClickListener { it }
+            commentCount.setOnClickListener {
+                onCommentClick?.invoke(item)
+            }
+            itemView.setOnClickListener { onAnswerClick?.invoke(item) }
         }
     }
 

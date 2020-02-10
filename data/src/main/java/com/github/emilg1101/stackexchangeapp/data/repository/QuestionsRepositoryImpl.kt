@@ -23,7 +23,7 @@ class QuestionsRepositoryImpl(
                 stackExchangeService.getQuestions(
                     page.toInt() + 1,
                     sort = sort,
-                    tags = tags.joinToString(separator = ";")
+                    tags = tags.joinToString(separator = ";").ifEmpty { null }
                 )
             )
         }.map(QuestionsResultEntityMapper)

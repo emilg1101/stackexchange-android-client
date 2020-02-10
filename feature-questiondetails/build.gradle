@@ -42,12 +42,6 @@ dependencies {
 
     implementation androidLibs.recyclerview
     implementation androidLibs.paging
-    implementation androidLibs.webkit
-    implementation glideLibs.glide
-
-    implementation markdown_libraries
-
-    kapt glideLibs.compiler
 
     testImplementation testLibs
     androidTestImplementation androidTestLibs

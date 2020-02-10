@@ -5,86 +5,134 @@
 
     <data>
 
+        <import type="androidx.lifecycle.LiveData" />
+
+        <import type="com.github.emilg1101.stackexcahnge.questiondetails.model.QuestionDetailsModel" />
+
         <variable
             name="viewmodel"
-            type="com.github.emilg1101.stackexcahnge.questiondetails.ui.QuestionDetailsViewModel" />
+            type="com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsViewModel" />
+
+        <variable
+            name="model"
+            type="LiveData&lt;QuestionDetailsModel>" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorDefaultWindowBackground">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ToolbarTheme"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:id="@+id/text_toolbar_title"
+                    style="@style/Text.Toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{model.title}" />
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/tags_group"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/text_question_date"
+                    style="@style/Text.Secondary"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorDefaultWindowBackground"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{model.date}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <WebView
+                <TextView
+                    android:id="@+id/text_title"
+                    style="@style/Text.Toolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{model.title}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_question_date" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tags_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:chipItems="@{model.tags}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_title" />
+
+                <com.github.emilg1101.stackexchangeapp.core.ui.widget.MarkdownTextView
                     android:id="@+id/body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorDefaultWindowBackground"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    app:goneUnless="@{model.markdown != null}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tags_group" />
+                    app:layout_constraintTop_toBottomOf="@id/tags_group"
+                    app:markdown="@{model.markdown}" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_question_comments"
-                    style="@style/Button.Default"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/body"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="@{() -> viewmodel.openQuestionComments()}"
+                    android:text="comments"
+                    android:theme="@style/Button.Primary"
+                    app:goneUnless="@{model.hasComments}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="comments"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/body" />
 
                 <TextView
                     android:id="@+id/text_answer_count"
-                    style="@style/Text.Default"
+                    style="@style/Text.Primary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{@string/answer_count(model.answerCount)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/button_question_comments"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     tools:text="9 Answers" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/answers_list"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

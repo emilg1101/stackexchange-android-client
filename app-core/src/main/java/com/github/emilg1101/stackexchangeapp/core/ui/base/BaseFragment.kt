@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -32,6 +33,7 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.doOnLayout { onLayout(it, savedInstanceState) }
         viewModel.snackbar.observe(viewLifecycleOwner) { text ->
             text?.let {
                 Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
@@ -42,4 +44,6 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
     fun setToolbar(toolbar: Toolbar) {
         (activity as? AppActivity)?.setToolbar(toolbar)
     }
+
+    open fun onLayout(view: View, savedInstanceState: Bundle?) {}
 }

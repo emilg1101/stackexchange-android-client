@@ -12,6 +12,7 @@ class TagsRepositoryImpl(
 ) : TagsRepository {
 
     override fun getPopularTags(): Flow<List<String>> {
-        return flow { emit(stackExchangeService.getTags()) }.map(TagsResultEntityMapper)
+        return flow { emit(stackExchangeService.getTags()) }
+            .map(TagsResultEntityMapper)
     }
 }

@@ -1,5 +1,6 @@
 package com.github.emilg1101.stackexcahnge.questiondetails.model
 
+import com.github.emilg1101.stackexchangeapp.core.extensions.format
 import com.github.emilg1101.stackexchangeapp.domain.entity.Question
 
 data class QuestionDetailsModel(
@@ -9,7 +10,9 @@ data class QuestionDetailsModel(
     val ownerName: String,
     val tags: List<String>,
     val markdown: String,
-    val answerCount: Int
+    val answerCount: Int,
+    val date: String,
+    val hasComments: Boolean
 )
 
 val QuestionDetailsModelMapper: suspend (Question) -> QuestionDetailsModel = { question ->
@@ -20,6 +23,8 @@ val QuestionDetailsModelMapper: suspend (Question) -> QuestionDetailsModel = { q
         question.owner.name,
         question.tags,
         question.markdown,
-        question.answerCount
+        question.answerCount,
+        question.date.format("E d MMM yyyy HH:mm"),
+        question.commentCount > 0
     )
 }

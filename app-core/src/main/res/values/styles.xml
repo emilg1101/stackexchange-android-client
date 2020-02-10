@@ -1,52 +1,122 @@
 <resources>
 
-    <style name="StackExchangeTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="StackExchange" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">#ffffff</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorOnPrimary</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
         <item name="android:windowLightStatusBar">@bool/windowLightStatusBar</item>
-        <item name="colorControlNormal">@color/colorAccent</item>
     </style>
 
-    <style name="ToolbarTheme">
+    <style name="StackExchange.Questions" />
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="android:titleTextAppearance">@style/Text.Toolbar</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:fontFamily">@font/alegreya_sans_sc_extrabold</item>
     </style>
 
     <style name="BottomNavigationViewTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="itemIconTint">@color/bottom_nav_item_tint</item>
         <item name="itemTextColor">@color/bottom_nav_item_tint</item>
-        <item name="itemRippleColor">@color/bottom_nav_ripple_color</item>
+        <item name="itemRippleColor">@color/ripple_on_primary</item>
+        <item name="itemBackground">?attr/colorPrimary</item>
     </style>
 
-    <style name="SortChips" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/chip_state_list_background</item>
-        <item name="android:textColor">@color/defaultTextColor</item>
+    <style name="Text" />
+
+    <style name="Text.Primary">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">@dimen/text_size_subtitle1</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
-    <style name="Text"/>
+    <style name="Text.Primary.Button">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
 
-    <style name="Text.Default">
-        <item name="android:textColor">@color/defaultTextColor</item>
+    <style name="Text.Primary.Body2">
+        <item name="android:textSize">@dimen/text_size_body2</item>
+    </style>
+
+    <style name="Text.Secondary">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textSize">@dimen/text_size_subtitle2</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Text.Secondary.Caption">
+        <item name="android:textSize">@dimen/text_size_caption</item>
     </style>
 
     <style name="Text.ToolbarSpinner">
-        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
     <style name="Text.Toolbar">
-        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/alegreya_sans_sc_extrabold</item>
     </style>
 
-    <style name="Button" parent="Widget.MaterialComponents.Button"/>
+    <style name="Button" parent="Widget.AppCompat.Button" />
 
-    <style name="Button.Default">
-        <item name="android:textColor">@color/defaultTextColor</item>
+    <style name="Button.Primary">
+        <item name="android:textAppearance">@style/Text.Primary.Button</item>
     </style>
+
+    <style name="Chip.Sort" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_state_list_background</item>
+        <item name="android:textAppearance">@style/Text.Primary.Body2</item>
+        <item name="rippleColor">@color/ripple_on_primary</item>
+    </style>
+
+    <style name="Chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipIconTint">@color/colorOnPrimary</item>
+        <item name="chipIconSize">16dp</item>
+        <item name="chipIconEnabled">true</item>
+        <item name="iconStartPadding">4dp</item>
+    </style>
+
+    <style name="Chip.UpVoteCount">
+        <item name="chipIcon">@drawable/ic_up_vote</item>
+    </style>
+
+    <style name="Chip.DownVoteCount">
+        <item name="chipIcon">@drawable/ic_down_vote</item>
+    </style>
+
+    <style name="Chip.CommentCount">
+        <item name="chipIcon">@drawable/ic_comment</item>
+    </style>
+
+    <style name="Chip.IconOnly">
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+        <item name="iconStartPadding">0dp</item>
+        <item name="chipEndPadding">4dp</item>
+        <item name="closeIconStartPadding">0dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipIconSize">24dp</item>
+    </style>
+
+    <style name="Chip.Close" parent="@style/Widget.MaterialComponents.Chip.Action">
+        <item name="closeIconVisible">true</item>
+    </style>
+
+    <style name="PostProfile"></style>
 
 </resources>

@@ -1,10 +1,16 @@
 package com.github.emilg1101.stackexchangeapp.domain.entity
 
+import java.util.Calendar
+
 class Answer(
     val id: Int,
     val questionId: Int,
     val owner: Owner,
-    val accepted: Boolean
+    val accepted: Boolean,
+    val commentCount: Int,
+    val upVoteCount: Int,
+    val downVoteCount: Int,
+    val date: Calendar
 ) {
-    var markdown: String = ""
+    var body: String = ""
 }

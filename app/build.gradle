@@ -43,12 +43,11 @@ dependencies {
     implementation project(':app-core')
     api project(':data')
 
-    implementation project(':feature-questionssearch')
+    implementation project(':feature-questions')
     implementation project(':feature-questiondetails')
     implementation project(':feature-profiledetails')
     implementation project(':feature-authorization')
     implementation project(':feature-notifications')
-    implementation project(':feature-comments')
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

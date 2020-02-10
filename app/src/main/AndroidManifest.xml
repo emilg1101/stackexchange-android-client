@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/StackExchangeTheme">
+        android:theme="@style/StackExchange">
         <activity android:name=".app.ui.main.MainActivity"></activity>
         <activity android:name=".app.ui.launch.LaunchActivity">
             <intent-filter>
