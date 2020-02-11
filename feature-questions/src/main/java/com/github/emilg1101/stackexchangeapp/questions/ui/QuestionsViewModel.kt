@@ -7,6 +7,8 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.github.emilg1101.stackexchangeapp.core.extensions.combine
+import com.github.emilg1101.stackexchangeapp.core.extensions.setValueIfNew
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
 import com.github.emilg1101.stackexchangeapp.core.util.ListLiveData
 import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
@@ -79,7 +81,10 @@ class QuestionsViewModel internal constructor(
             .setFetchExecutor(Executors.newSingleThreadExecutor())
 
     private val _pagedListLiveData = MutableLiveData(livePagedListBuilder.build())
-    var pagedListLiveData = _pagedListLiveData
+    var pagedListLiveData = _sortLiveData.combine(_selectedTagsLiveData).switchMap {
+        _pagedListLiveData.value = livePagedListBuilder.build()
+        _pagedListLiveData
+    }
 
     init {
         tagsRepository.getPopularTags()
@@ -90,10 +95,7 @@ class QuestionsViewModel internal constructor(
     }
 
     fun changeSort(sort: Sort) {
-        if (_sortLiveData.value?.sort != sort.sort) {
-            _sortLiveData.value = sort
-            pagedListLiveData.value = livePagedListBuilder.build()
-        }
+        _sortLiveData.setValueIfNew(sort)
     }
 
     fun addTag(tag: String) {
@@ -102,7 +104,6 @@ class QuestionsViewModel internal constructor(
         } else {
             _selectedTagsLiveData + tag
         }
-        pagedListLiveData.value = livePagedListBuilder.build()
     }
 
     override suspend fun onDataLoading() {
