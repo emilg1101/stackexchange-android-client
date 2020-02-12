@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnswersRepository {
 
-    fun getAnswersByQuestionId(questionId: Int, page: Long): Flow<List<Answer>>
+    suspend fun getAnswersByQuestionId(questionId: Int, page: Long): Flow<List<Answer>>
 
-    fun getAnswer(answerId: Int): Flow<Answer>
+    suspend fun getAnswer(answerId: Int): Flow<Answer>
 }

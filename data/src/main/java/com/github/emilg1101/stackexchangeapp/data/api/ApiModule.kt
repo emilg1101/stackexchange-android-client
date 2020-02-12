@@ -1,6 +1,7 @@
 package com.github.emilg1101.stackexchangeapp.data.api
 
 import com.github.emilg1101.stackexchangeapp.data.di.ApiComponent
+import com.github.emilg1101.stackexchangeapp.data.extensions.FlowCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,8 +16,9 @@ class ApiModule(baseUrl: String) : ApiComponent {
 
     override val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(FlowCallAdapterFactory.create())
+        .client(okHttpClient)
         .build()
 
     override val stackExchangeService: StackExchangeService =

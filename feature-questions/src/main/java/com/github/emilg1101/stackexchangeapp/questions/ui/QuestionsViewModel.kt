@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 class QuestionsViewModel internal constructor(
@@ -87,11 +88,13 @@ class QuestionsViewModel internal constructor(
     }
 
     init {
-        tagsRepository.getPopularTags()
-            .map(TagItemModelsMapper)
-            .catch { _snackbar.value = it.message }
-            .onEach { tagsChannel.offer(it) }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            tagsRepository.getPopularTags()
+                .map(TagItemModelsMapper)
+                .catch { _snackbar.value = it.message }
+                .onEach { tagsChannel.offer(it) }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun changeSort(sort: Sort) {

@@ -10,6 +10,7 @@ import com.github.emilg1101.stackexcahnge.questiondetails.paging.DataSourceState
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.AnswersLivePagedListFactory
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
 import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -28,11 +29,13 @@ class QuestionDetailsViewModel internal constructor(
     private val _questionId = MutableLiveData<Int>()
 
     val questionDetails = _questionId.switchMap { id ->
-        questionsRepository.getQuestion(id)
-            .map(QuestionDetailsModelMapper)
-            .onCompletion { _progress.value = false }
-            .catch { _snackbar.value = it.message }
-            .asLiveData()
+        viewModelScope.async {
+            questionsRepository.getQuestion(id)
+                .map(QuestionDetailsModelMapper)
+                .onCompletion { _progress.value = false }
+                .catch { _snackbar.value = it.message }
+                .asLiveData()
+        }.getCompleted()
     }
 
     var pagedListLiveData = _questionId.switchMap { id ->

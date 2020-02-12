@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface TagsRepository {
 
-    fun getPopularTags(): Flow<List<String>>
+    suspend fun getPopularTags(): Flow<List<String>>
 }

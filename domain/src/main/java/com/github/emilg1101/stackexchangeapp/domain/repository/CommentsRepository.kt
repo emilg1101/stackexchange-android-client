@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentsRepository {
 
-    fun getComments(postId: Int, page: Long): Flow<List<Comment>>
+    suspend fun getComments(postId: Int, page: Long): Flow<List<Comment>>
 }

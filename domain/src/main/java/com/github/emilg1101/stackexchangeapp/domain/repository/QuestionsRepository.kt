@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuestionsRepository {
 
-    fun getQuestions(
+    suspend fun getQuestions(
         page: Long,
         sort: String,
         tags: List<String>
     ): Flow<List<Question>>
 
-    fun getQuestion(questionsId: Int): Flow<Question>
+    suspend fun getQuestion(questionsId: Int): Flow<Question>
 }

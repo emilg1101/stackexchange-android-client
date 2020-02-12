@@ -10,6 +10,7 @@ import com.github.emilg1101.stackexcahnge.questiondetails.paging.CommentsLivePag
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.DataSourceStateCallback
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
 import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -27,11 +28,13 @@ class AnswerDetailsViewModel(
     private val _answerId = MutableLiveData<Int>()
 
     val answerDetails = _answerId.switchMap { answerId ->
-        answersRepository.getAnswer(answerId)
-            .map(AnswerDetailsModelMapper)
-            .onCompletion { _progress.value = false }
-            .catch { _snackbar.value = it.message }
-            .asLiveData()
+        viewModelScope.async {
+            answersRepository.getAnswer(answerId)
+                .map(AnswerDetailsModelMapper)
+                .onCompletion { _progress.value = false }
+                .catch { _snackbar.value = it.message }
+                .asLiveData()
+        }.getCompleted()
     }
 
     var pagedListLiveData = _answerId.switchMap { answerId ->
