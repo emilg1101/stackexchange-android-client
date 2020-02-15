@@ -14,10 +14,12 @@ import com.github.emilg1101.stackexchangeapp.app.di.module.ProfileDetailsModule
 import com.github.emilg1101.stackexchangeapp.app.ui.main.MainComponent
 import com.github.emilg1101.stackexchangeapp.authorization.di.AuthorizationComponent
 import com.github.emilg1101.stackexchangeapp.data.di.DataComponent
+import com.github.emilg1101.stackexchangeapp.data.di.RepositoryComponent
 import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
 import com.github.emilg1101.stackexchangeapp.domain.repository.CommentsRepository
 import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.TagsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionsUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.tags.GetPopularTagsUseCase
 import com.github.emilg1101.stackexchangeapp.notifications.di.NotificationsComponent
 import com.github.emilg1101.stackexchangeapp.profiledetails.di.ProfileDetailsComponent
 import com.github.emilg1101.stackexchangeapp.questions.di.QuestionsFeature
@@ -34,9 +36,11 @@ object AppInjector {
         appComponent = AppComponent.create(application)
         dataComponent = DataComponent.create(appComponent.context)
         mainComponent = MainComponent.create()
-        questionsFeature.inject(object : QuestionsFeature.Dependencies {
-            override val questionsRepository: QuestionsRepository = dataComponent.repositoryComponent.questionsRepository
-            override val tagsRepository: TagsRepository = dataComponent.repositoryComponent.tagsRepository
+        questionsFeature.inject(object : QuestionsFeature.Dependencies, RepositoryComponent by dataComponent.repositoryComponent {
+            override val getQuestionsUseCase: GetQuestionsUseCase
+                get() = GetQuestionsUseCase(questionsRepository)
+            override val getPopularTagsUseCase: GetPopularTagsUseCase
+                get() = GetPopularTagsUseCase(tagsRepository)
             override val questionsNavigation: QuestionsNavigation = mainComponent.navigator
         })
         questionDetailsFeature.inject(object : QuestionDetailsFeature.Dependencies {

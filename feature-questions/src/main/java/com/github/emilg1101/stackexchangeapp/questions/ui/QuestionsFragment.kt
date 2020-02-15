@@ -5,29 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseFragment
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.TagsRepository
 import com.github.emilg1101.stackexchangeapp.questions.R
 import com.github.emilg1101.stackexchangeapp.questions.adapter.QuestionsPagingAdapter
 import com.github.emilg1101.stackexchangeapp.questions.databinding.FragmentQuestionsBinding
 import com.github.emilg1101.stackexchangeapp.questions.di.questionsComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.fragment_questions.chip_filter
-import kotlinx.android.synthetic.main.fragment_questions.chip_sort
-import kotlinx.android.synthetic.main.fragment_questions.list
-import kotlinx.android.synthetic.main.fragment_questions.tags_group
-import kotlinx.android.synthetic.main.fragment_questions.toolbar
 import kotlinx.android.synthetic.main.bottom_sheet_filter.available_tags_group
 import kotlinx.android.synthetic.main.bottom_sheet_filter.bottom_sheet
 import kotlinx.android.synthetic.main.bottom_sheet_filter.chip_hot_sort
 import kotlinx.android.synthetic.main.bottom_sheet_filter.chip_month_sort
 import kotlinx.android.synthetic.main.bottom_sheet_filter.chip_week_sort
+import kotlinx.android.synthetic.main.fragment_questions.chip_filter
+import kotlinx.android.synthetic.main.fragment_questions.chip_sort
+import kotlinx.android.synthetic.main.fragment_questions.list
+import kotlinx.android.synthetic.main.fragment_questions.tags_group
+import kotlinx.android.synthetic.main.fragment_questions.toolbar
 
 class QuestionsSearchFragment :
     BaseFragment<FragmentQuestionsBinding>(R.layout.fragment_questions) {
@@ -35,7 +31,7 @@ class QuestionsSearchFragment :
     lateinit var adapter: QuestionsPagingAdapter
 
     override val viewModel: QuestionsViewModel by viewModels {
-        questionsComponent.provideViewModelFactory()
+        questionsComponent.viewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +58,9 @@ class QuestionsSearchFragment :
 
         adapter.onQuestionClick = {
             viewModel.openQuestion(it)
+        }
+        adapter.onTagClick = {
+            viewModel.addTag(it)
         }
 
         list.layoutManager = LinearLayoutManager(requireContext())
@@ -126,21 +125,6 @@ class QuestionsSearchFragment :
             }
         }
     }
-}
-
-class QuestionsSearchViewModelFactory internal constructor(
-    private val questionsRepository: QuestionsRepository,
-    private val tagsRepository: TagsRepository,
-    private val questionsNavigation: QuestionsNavigation
-) : ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
-        QuestionsViewModel(
-            questionsRepository,
-            tagsRepository,
-            questionsNavigation
-        ) as T
 }
 
 class Sort(var sort: String)

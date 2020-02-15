@@ -7,6 +7,9 @@
         <variable
             name="itemModel"
             type="com.github.emilg1101.stackexchangeapp.questions.model.QuestionItemModel" />
+        <variable
+            name="chipClickListener"
+            type="com.github.emilg1101.stackexchangeapp.core.binding.ChipClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +53,8 @@
             app:layout_constraintEnd_toEndOf="@id/text_title"
             app:layout_constraintStart_toStartOf="@id/text_title"
             app:layout_constraintTop_toBottomOf="@id/text_title"
-            app:chipItems="@{itemModel.tags}"/>
+            app:chipItems="@{itemModel.tags}"
+            app:clickListener="@{chipClickListener}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

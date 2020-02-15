@@ -2,7 +2,7 @@ package com.github.emilg1101.stackexchangeapp.questions.paging
 
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionsUseCase
 import com.github.emilg1101.stackexchangeapp.questions.model.QuestionItemModel
 import com.github.emilg1101.stackexchangeapp.questions.model.QuestionItemModelsMapper
 import com.github.emilg1101.stackexchangeapp.questions.ui.Sort
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class QuestionsDataSource internal constructor(
-    private val questionsRepository: QuestionsRepository,
+    private val getQuestionsUseCase: GetQuestionsUseCase,
     private val coroutineScope: CoroutineScope,
     private val sort: Sort,
     private val tags: List<String>,
@@ -27,7 +27,7 @@ class QuestionsDataSource internal constructor(
     ) {
         coroutineScope.launch {
             stateCallback.onDataLoading()
-            questionsRepository.getQuestions(0, sort.sort, tags)
+            getQuestionsUseCase(GetQuestionsUseCase.Params(0, sort.sort, tags))
                 .map(QuestionItemModelsMapper)
                 .catch { stateCallback.onError(it) }
                 .onCompletion { stateCallback.onDataLoaded() }
@@ -46,7 +46,7 @@ class QuestionsDataSource internal constructor(
         callback: LoadCallback<Long, QuestionItemModel>
     ) {
         coroutineScope.launch {
-            questionsRepository.getQuestions(params.key, sort.sort, tags)
+            getQuestionsUseCase(GetQuestionsUseCase.Params(params.key, sort.sort, tags))
                 .map(QuestionItemModelsMapper)
                 .catch { stateCallback.onError(it) }
                 .collect { result ->
@@ -63,7 +63,7 @@ class QuestionsDataSource internal constructor(
 }
 
 internal class QuestionsDataSourceFactory(
-    private val questionsRepository: QuestionsRepository,
+    private val getQuestionsUseCase: GetQuestionsUseCase,
     private val coroutineScope: CoroutineScope,
     private val sort: Sort,
     private val tags: List<String>,
@@ -72,7 +72,7 @@ internal class QuestionsDataSourceFactory(
 
     override fun create(): DataSource<Long, QuestionItemModel> {
         return QuestionsDataSource(
-            questionsRepository,
+            getQuestionsUseCase,
             coroutineScope,
             sort,
             tags,

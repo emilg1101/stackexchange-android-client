@@ -4,12 +4,17 @@ import androidx.databinding.BindingAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
-@BindingAdapter("app:chipItems")
-fun setChipItems(group: ChipGroup, items: List<String>?) {
+@BindingAdapter("app:chipItems", "app:clickListener", requireAll = false)
+fun setChipItems(group: ChipGroup, items: List<String>?, clickListener: ChipClickListener? = null) {
     group.removeAllViews()
-    items?.forEach {
+    items?.forEach { item ->
         group.addView(Chip(group.context).apply {
-            text = it
+            text = item
+            setOnClickListener { clickListener?.click(item) }
         })
     }
+}
+
+interface ChipClickListener {
+    fun click(text: String)
 }

@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.github.emilg1101.stackexchangeapp.core.binding.ChipClickListener
 import com.github.emilg1101.stackexchangeapp.questions.R
 import com.github.emilg1101.stackexchangeapp.questions.databinding.ItemQuestionBinding
 import com.github.emilg1101.stackexchangeapp.questions.model.QuestionItemModel
-import kotlinx.android.synthetic.main.item_question.view.profile
 
 class QuestionsPagingAdapter :
     PagedListAdapter<QuestionItemModel, QuestionsPagingAdapter.QuestionItemViewHolder>(
@@ -17,6 +17,7 @@ class QuestionsPagingAdapter :
     ) {
 
     var onQuestionClick: ((QuestionItemModel) -> Unit)? = null
+    var onTagClick: ((String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemQuestionBinding>(LayoutInflater.from(parent.context), R.layout.item_question, parent, false)
@@ -28,10 +29,15 @@ class QuestionsPagingAdapter :
     }
 
     inner class QuestionItemViewHolder(private val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: QuestionItemModel?) = with(binding.root) {
+        fun bind(item: QuestionItemModel?) = with(binding) {
             binding.itemModel = item
+            binding.chipClickListener = object : ChipClickListener {
+                override fun click(text: String) {
+                    onTagClick?.invoke(text)
+                }
+            }
             profile.setOnClickListener {}
-            setOnClickListener { item?.let { onQuestionClick?.invoke(it) } }
+            root.setOnClickListener { item?.let { onQuestionClick?.invoke(it) } }
         }
     }
 

@@ -1,8 +1,8 @@
 package com.github.emilg1101.stackexchangeapp.questions.di
 
 import com.github.emilg1101.stackexchangeapp.core.feature.Feature
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.TagsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionsUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.tags.GetPopularTagsUseCase
 import com.github.emilg1101.stackexchangeapp.questions.ui.QuestionsNavigation
 
 val questionsFeature: QuestionsFeature = QuestionsFeatureImpl()
@@ -11,9 +11,9 @@ interface QuestionsFeature : Feature<QuestionsFeature.Dependencies> {
 
     interface Dependencies {
 
-        val questionsRepository: QuestionsRepository
+        val getQuestionsUseCase: GetQuestionsUseCase
 
-        val tagsRepository: TagsRepository
+        val getPopularTagsUseCase: GetPopularTagsUseCase
 
         val questionsNavigation: QuestionsNavigation
     }

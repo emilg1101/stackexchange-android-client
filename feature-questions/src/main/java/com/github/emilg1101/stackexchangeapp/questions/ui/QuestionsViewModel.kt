@@ -2,22 +2,21 @@ package com.github.emilg1101.stackexchangeapp.questions.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import com.github.emilg1101.stackexchangeapp.core.extensions.combine
 import com.github.emilg1101.stackexchangeapp.core.extensions.setValueIfNew
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
 import com.github.emilg1101.stackexchangeapp.core.util.ListLiveData
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.TagsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.tags.GetPopularTagsUseCase
 import com.github.emilg1101.stackexchangeapp.questions.model.QuestionItemModel
 import com.github.emilg1101.stackexchangeapp.questions.model.TagItemModel
 import com.github.emilg1101.stackexchangeapp.questions.model.TagItemModelsMapper
 import com.github.emilg1101.stackexchangeapp.questions.paging.DataSourceStateCallback
-import com.github.emilg1101.stackexchangeapp.questions.paging.QuestionsDataSourceFactory
+import com.github.emilg1101.stackexchangeapp.questions.paging.QuestionsLivePagedListFactory
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
@@ -30,8 +29,8 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 class QuestionsViewModel internal constructor(
-    private val questionsRepository: QuestionsRepository,
-    private val tagsRepository: TagsRepository,
+    private val questionsLivePagedListFactory: QuestionsLivePagedListFactory,
+    private val getPopularTagsUseCase: GetPopularTagsUseCase,
     private val questionsNavigation: QuestionsNavigation
 ) : BaseViewModel(), DataSourceStateCallback {
 
@@ -63,23 +62,13 @@ class QuestionsViewModel internal constructor(
                 }.asLiveData()
         }
 
-    private val questionsDataSourceFactory
-        get() = QuestionsDataSourceFactory(
-            questionsRepository,
-            viewModelScope,
+    private val livePagedListBuilder
+        get() = questionsLivePagedListFactory.create(
             _sortLiveData.value ?: HotSort,
             _selectedTagsLiveData.value ?: listOf(),
+            viewModelScope,
             this
-        )
-
-    private var config = PagedList.Config.Builder()
-        .setEnablePlaceholders(false)
-        .setPageSize(10)
-        .build()
-
-    private val livePagedListBuilder
-        get() = LivePagedListBuilder(questionsDataSourceFactory, config)
-            .setFetchExecutor(Executors.newSingleThreadExecutor())
+        ).setFetchExecutor(Executors.newSingleThreadExecutor())
 
     private val _pagedListLiveData = MutableLiveData(livePagedListBuilder.build())
     var pagedListLiveData = _sortLiveData.combine(_selectedTagsLiveData).switchMap {
@@ -89,7 +78,7 @@ class QuestionsViewModel internal constructor(
 
     init {
         viewModelScope.launch {
-            tagsRepository.getPopularTags()
+            getPopularTagsUseCase()
                 .map(TagItemModelsMapper)
                 .catch { _snackbar.value = it.message }
                 .onEach { tagsChannel.offer(it) }
@@ -129,4 +118,19 @@ class QuestionsViewModel internal constructor(
     fun openQuestion(model: QuestionItemModel) {
         questionsNavigation.openQuestionDetails(model.questionId)
     }
+}
+
+class QuestionsSearchViewModelFactory internal constructor(
+    private val questionsLivePagedListFactory: QuestionsLivePagedListFactory,
+    private val getPopularTagsUseCase: GetPopularTagsUseCase,
+    private val questionsNavigation: QuestionsNavigation
+) : ViewModelProvider.NewInstanceFactory() {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+        QuestionsViewModel(
+            questionsLivePagedListFactory,
+            getPopularTagsUseCase,
+            questionsNavigation
+        ) as T
 }
