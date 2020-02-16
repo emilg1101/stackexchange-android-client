@@ -4,7 +4,7 @@ import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.github.emilg1101.stackexcahnge.questiondetails.model.AnswerItemModel
 import com.github.emilg1101.stackexcahnge.questiondetails.model.AnswerItemModelsMapper
-import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.answers.GetAnswersUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class AnswersDataSource internal constructor(
-    private val answersRepository: AnswersRepository,
+    private val getAnswersUseCase: GetAnswersUseCase,
     private val coroutineScope: CoroutineScope,
     private val questionId: Int,
     private val stateCallback: DataSourceStateCallback
@@ -25,7 +25,7 @@ class AnswersDataSource internal constructor(
     ) {
         coroutineScope.launch {
             stateCallback.onDataLoading()
-            answersRepository.getAnswersByQuestionId(questionId, 1)
+            getAnswersUseCase(GetAnswersUseCase.Params(questionId))
                 .map(AnswerItemModelsMapper)
                 .catch { stateCallback.onError(it) }
                 .onCompletion { stateCallback.onDataLoaded() }
@@ -44,7 +44,7 @@ class AnswersDataSource internal constructor(
         callback: LoadCallback<Long, AnswerItemModel>
     ) {
         coroutineScope.launch {
-            answersRepository.getAnswersByQuestionId(questionId, params.key)
+            getAnswersUseCase(GetAnswersUseCase.Params(questionId, params.key))
                 .map(AnswerItemModelsMapper)
                 .catch { stateCallback.onError(it) }
                 .collect { result ->
@@ -61,7 +61,7 @@ class AnswersDataSource internal constructor(
 }
 
 class AnswersDataSourceFactory(
-    private val answersRepository: AnswersRepository,
+    private val getAnswersUseCase: GetAnswersUseCase,
     private val coroutineScope: CoroutineScope,
     private val questionId: Int,
     private val callback: DataSourceStateCallback
@@ -69,7 +69,7 @@ class AnswersDataSourceFactory(
 
     override fun create(): DataSource<Long, AnswerItemModel> {
         return AnswersDataSource(
-            answersRepository,
+            getAnswersUseCase,
             coroutineScope,
             questionId,
             callback

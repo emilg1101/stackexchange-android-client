@@ -15,9 +15,10 @@ import com.github.emilg1101.stackexchangeapp.app.ui.main.MainComponent
 import com.github.emilg1101.stackexchangeapp.authorization.di.AuthorizationComponent
 import com.github.emilg1101.stackexchangeapp.data.di.DataComponent
 import com.github.emilg1101.stackexchangeapp.data.di.RepositoryComponent
-import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.CommentsRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.answers.GetAnswerUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.answers.GetAnswersUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.comments.GetCommentsUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionUseCase
 import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionsUseCase
 import com.github.emilg1101.stackexchangeapp.domain.usecase.tags.GetPopularTagsUseCase
 import com.github.emilg1101.stackexchangeapp.notifications.di.NotificationsComponent
@@ -43,11 +44,16 @@ object AppInjector {
                 get() = GetPopularTagsUseCase(tagsRepository)
             override val questionsNavigation: QuestionsNavigation = mainComponent.navigator
         })
-        questionDetailsFeature.inject(object : QuestionDetailsFeature.Dependencies {
-            override val questionsRepository: QuestionsRepository = dataComponent.repositoryComponent.questionsRepository
-            override val answersRepository: AnswersRepository = dataComponent.repositoryComponent.answersRepository
+        questionDetailsFeature.inject(object : QuestionDetailsFeature.Dependencies, RepositoryComponent by dataComponent.repositoryComponent {
             override val navigation: QuestionDetailsNavigation = mainComponent.navigator
-            override val commentsRepository: CommentsRepository = dataComponent.repositoryComponent.commentsRepository
+            override val getAnswerUseCase: GetAnswerUseCase
+                get() = GetAnswerUseCase(answersRepository)
+            override val getAnswersUseCase: GetAnswersUseCase
+                get() = GetAnswersUseCase(answersRepository)
+            override val getCommentsUseCase: GetCommentsUseCase
+                get() = GetCommentsUseCase(commentsRepository)
+            override val getQuestionUseCase: GetQuestionUseCase
+                get() = GetQuestionUseCase(questionsRepository)
         })
         ProfileDetailsComponent.instance = ProfileDetailsModule()
         AuthorizationComponent.instance = AuthorizationModule(mainComponent)

@@ -9,14 +9,17 @@ import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: Int) : Fragment(containerId) {
 
-    protected abstract val viewModel: BaseViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected lateinit var binding: Binding
+
+    protected abstract val viewModel: BaseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,

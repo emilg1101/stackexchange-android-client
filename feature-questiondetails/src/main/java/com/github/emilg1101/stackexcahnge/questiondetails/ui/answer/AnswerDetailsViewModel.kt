@@ -2,6 +2,8 @@ package com.github.emilg1101.stackexcahnge.questiondetails.ui.answer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
@@ -9,14 +11,14 @@ import com.github.emilg1101.stackexcahnge.questiondetails.model.AnswerDetailsMod
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.CommentsLivePagedListFactory
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.DataSourceStateCallback
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
-import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.answers.GetAnswerUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 
 class AnswerDetailsViewModel(
-    private val answersRepository: AnswersRepository,
+    private val getAnswerUseCase: GetAnswerUseCase,
     private val livePagedListFactory: CommentsLivePagedListFactory
 ) : BaseViewModel(), DataSourceStateCallback {
 
@@ -29,7 +31,7 @@ class AnswerDetailsViewModel(
 
     val answerDetails = _answerId.switchMap { answerId ->
         viewModelScope.async {
-            answersRepository.getAnswer(answerId)
+            getAnswerUseCase(GetAnswerUseCase.Params(answerId))
                 .map(AnswerDetailsModelMapper)
                 .onCompletion { _progress.value = false }
                 .catch { _snackbar.value = it.message }
@@ -60,4 +62,17 @@ class AnswerDetailsViewModel(
     override suspend fun onError(t: Throwable) {
         _snackbar.value = t.message
     }
+}
+
+class AnswerDetailsViewModelFactory(
+    private val getAnswerUseCase: GetAnswerUseCase,
+    private val livePagedListFactory: CommentsLivePagedListFactory
+) : ViewModelProvider.NewInstanceFactory() {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+        AnswerDetailsViewModel(
+            getAnswerUseCase,
+            livePagedListFactory
+        ) as T
 }

@@ -30,9 +30,7 @@ class QuestionsSearchFragment :
 
     lateinit var adapter: QuestionsPagingAdapter
 
-    override val viewModel: QuestionsViewModel by viewModels {
-        questionsComponent.viewModelFactory
-    }
+    override val viewModel: QuestionsViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         questionsComponent.inject(this)
@@ -74,9 +72,9 @@ class QuestionsSearchFragment :
             }
         }
 
-        chip_hot_sort.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) viewModel.changeSort(Sort("hot")) }
-        chip_week_sort.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) viewModel.changeSort(Sort("week")) }
-        chip_month_sort.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) viewModel.changeSort(Sort("month")) }
+        chip_hot_sort.setOnCheckedChangeListener { _, isChecked -> if (isChecked) viewModel.changeSort(Sort("hot")) }
+        chip_week_sort.setOnCheckedChangeListener { _, isChecked -> if (isChecked) viewModel.changeSort(Sort("week")) }
+        chip_month_sort.setOnCheckedChangeListener { _, isChecked -> if (isChecked) viewModel.changeSort(Sort("month")) }
 
         viewModel.selectedTagsLiveData.observe(viewLifecycleOwner) { tags ->
             if (tags_group.childCount > 2) {
@@ -101,7 +99,7 @@ class QuestionsSearchFragment :
                 (layoutInflater.inflate(R.layout.chip_default, available_tags_group, false) as? Chip)?.apply {
                     text = it.title
                     isChecked = it.selected
-                    setOnCheckedChangeListener { view, _ ->
+                    setOnCheckedChangeListener { _, _ ->
                         viewModel.addTag(it.title)
                     }
                 }

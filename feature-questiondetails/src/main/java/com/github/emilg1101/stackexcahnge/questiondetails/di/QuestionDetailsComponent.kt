@@ -1,31 +1,33 @@
 package com.github.emilg1101.stackexcahnge.questiondetails.di
 
 import androidx.paging.PagedList
+import com.github.emilg1101.stackexcahnge.questiondetails.adapter.AnswersPagingAdapter
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.AnswersLivePagedListFactory
+import com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsFragment
 import com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsNavigation
 import com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsViewModelFactory
-import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.answers.GetAnswersUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionUseCase
 
 internal interface QuestionDetailsComponent {
 
-    val questionsRepository: QuestionsRepository
+    val getQuestionUseCase: GetQuestionUseCase
 
-    val answersRepository: AnswersRepository
+    val getAnswersUseCase: GetAnswersUseCase
 
     val navigation: QuestionDetailsNavigation
 
-    fun provideViewModelFactory(): QuestionDetailsViewModelFactory
+    fun inject(fragment: QuestionDetailsFragment)
 
     companion object {
         fun create(dependencies: QuestionDetailsFeature.Dependencies) =
-            QuestionDetailsModule(dependencies.questionsRepository, dependencies.answersRepository, dependencies.navigation)
+            QuestionDetailsModule(dependencies.getQuestionUseCase, dependencies.getAnswersUseCase, dependencies.navigation)
     }
 }
 
 internal class QuestionDetailsModule(
-    override val questionsRepository: QuestionsRepository,
-    override val answersRepository: AnswersRepository,
+    override val getQuestionUseCase: GetQuestionUseCase,
+    override val getAnswersUseCase: GetAnswersUseCase,
     override val navigation: QuestionDetailsNavigation
 ) : QuestionDetailsComponent {
 
@@ -34,15 +36,21 @@ internal class QuestionDetailsModule(
         .setPageSize(10)
         .build()
 
-    private fun provideLivePagedListFactory(): AnswersLivePagedListFactory {
-        return AnswersLivePagedListFactory(answersRepository, config)
-    }
+    private val livePagedListFactory: AnswersLivePagedListFactory =
+        AnswersLivePagedListFactory(getAnswersUseCase, config)
 
-    override fun provideViewModelFactory(): QuestionDetailsViewModelFactory {
-        return QuestionDetailsViewModelFactory(
-            questionsRepository,
+    private val viewModelFactory: QuestionDetailsViewModelFactory =
+        QuestionDetailsViewModelFactory(
+            getQuestionUseCase,
             navigation,
-            provideLivePagedListFactory()
+            livePagedListFactory
         )
+
+    private val adapter: AnswersPagingAdapter
+        get() = AnswersPagingAdapter()
+
+    override fun inject(fragment: QuestionDetailsFragment) {
+        fragment.viewModelFactory = viewModelFactory
+        fragment.adapter = adapter
     }
 }

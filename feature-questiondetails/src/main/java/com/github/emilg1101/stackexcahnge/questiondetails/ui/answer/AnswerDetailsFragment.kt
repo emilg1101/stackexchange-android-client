@@ -5,17 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.emilg1101.stackexcahnge.questiondetails.R
 import com.github.emilg1101.stackexcahnge.questiondetails.adapter.CommentsPagingAdapter
 import com.github.emilg1101.stackexcahnge.questiondetails.databinding.FragmentAnswerDetailsBinding
 import com.github.emilg1101.stackexcahnge.questiondetails.di.answerDetailsComponent
-import com.github.emilg1101.stackexcahnge.questiondetails.paging.CommentsLivePagedListFactory
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseFragment
-import com.github.emilg1101.stackexchangeapp.domain.repository.AnswersRepository
 import kotlinx.android.synthetic.main.fragment_answer_details.toolbar
 import kotlinx.android.synthetic.main.fragment_comments.comment_list
 
@@ -23,11 +19,14 @@ class AnswerDetailsFragment : BaseFragment<FragmentAnswerDetailsBinding>(R.layou
 
     private val answerId get() = arguments?.getInt("ANSWER_ID") ?: 0
 
-    override val viewModel: AnswerDetailsViewModel by viewModels {
-        answerDetailsComponent.provideAnswerDetailsViewModelFactory()
-    }
+    override val viewModel: AnswerDetailsViewModel by viewModels { viewModelFactory }
 
-    private val adapter = CommentsPagingAdapter()
+    lateinit var adapter: CommentsPagingAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        answerDetailsComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -49,17 +48,4 @@ class AnswerDetailsFragment : BaseFragment<FragmentAnswerDetailsBinding>(R.layou
             adapter.submitList(comments)
         }
     }
-}
-
-class AnswerDetailsViewModelFactory(
-    private val answersRepository: AnswersRepository,
-    private val livePagedListFactory: CommentsLivePagedListFactory
-) : ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
-        AnswerDetailsViewModel(
-            answersRepository,
-            livePagedListFactory
-        ) as T
 }

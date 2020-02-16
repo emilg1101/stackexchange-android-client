@@ -4,7 +4,7 @@ import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.github.emilg1101.stackexcahnge.questiondetails.model.CommentItemModel
 import com.github.emilg1101.stackexcahnge.questiondetails.model.CommentItemModelMapper
-import com.github.emilg1101.stackexchangeapp.domain.repository.CommentsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.comments.GetCommentsUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class CommentsDataSource internal constructor(
-    private val commentsRepository: CommentsRepository,
+    private val getCommentsUseCase: GetCommentsUseCase,
     private val coroutineScope: CoroutineScope,
     private val postId: Int,
     private val stateCallback: DataSourceStateCallback
@@ -25,7 +25,7 @@ class CommentsDataSource internal constructor(
     ) {
         coroutineScope.launch {
             stateCallback.onDataLoading()
-            commentsRepository.getComments(postId, 1)
+            getCommentsUseCase(GetCommentsUseCase.Params(postId))
                 .map(CommentItemModelMapper)
                 .catch { stateCallback.onError(it) }
                 .onCompletion { stateCallback.onDataLoaded() }
@@ -44,7 +44,7 @@ class CommentsDataSource internal constructor(
         callback: LoadCallback<Long, CommentItemModel>
     ) {
         coroutineScope.launch {
-            commentsRepository.getComments(postId, params.key)
+            getCommentsUseCase(GetCommentsUseCase.Params(postId, params.key))
                 .map(CommentItemModelMapper)
                 .catch { stateCallback.onError(it) }
                 .collect { result ->
@@ -61,7 +61,7 @@ class CommentsDataSource internal constructor(
 }
 
 class CommentsDataSourceFactory(
-    private val commentsRepository: CommentsRepository,
+    private val getCommentsUseCase: GetCommentsUseCase,
     private val coroutineScope: CoroutineScope,
     private val postId: Int,
     private val callback: DataSourceStateCallback
@@ -69,7 +69,7 @@ class CommentsDataSourceFactory(
 
     override fun create(): DataSource<Long, CommentItemModel> {
         return CommentsDataSource(
-            commentsRepository,
+            getCommentsUseCase,
             coroutineScope,
             postId,
             callback

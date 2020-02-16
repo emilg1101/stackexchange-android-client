@@ -8,17 +8,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.emilg1101.stackexcahnge.questiondetails.R
 import com.github.emilg1101.stackexcahnge.questiondetails.adapter.AnswersPagingAdapter
 import com.github.emilg1101.stackexcahnge.questiondetails.databinding.FragmentQuestionDetailsBinding
 import com.github.emilg1101.stackexcahnge.questiondetails.di.questionDetailsComponent
-import com.github.emilg1101.stackexcahnge.questiondetails.paging.AnswersLivePagedListFactory
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseFragment
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
 import kotlinx.android.synthetic.main.fragment_question_details.answers_list
 import kotlinx.android.synthetic.main.fragment_question_details.scroll
 import kotlinx.android.synthetic.main.fragment_question_details.text_title
@@ -29,11 +25,14 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
 
     private val questionId get() = arguments?.getInt("QUESTION_ID") ?: 0
 
-    override val viewModel: QuestionDetailsViewModel by viewModels {
-        questionDetailsComponent.provideViewModelFactory()
-    }
+    override val viewModel: QuestionDetailsViewModel by viewModels { viewModelFactory }
 
-    private val adapter = AnswersPagingAdapter()
+    lateinit var adapter: AnswersPagingAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        questionDetailsComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +84,7 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
             text_toolbar_title.requestLayout()
         }
 
-        scroll.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+        scroll.setOnScrollChangeListener { _: NestedScrollView?, _: Int, _: Int, _: Int, _: Int ->
             val location = IntArray(2)
             text_title.getLocationInWindow(location)
             val titleY = location[1] - toolbarLocation[1]
@@ -96,19 +95,4 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
             }
         }
     }
-}
-
-class QuestionDetailsViewModelFactory(
-    private val questionsRepository: QuestionsRepository,
-    private val navigation: QuestionDetailsNavigation,
-    private val livePagedListFactory: AnswersLivePagedListFactory
-) : ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) =
-        QuestionDetailsViewModel(
-            questionsRepository,
-            navigation,
-            livePagedListFactory
-        ) as T
 }

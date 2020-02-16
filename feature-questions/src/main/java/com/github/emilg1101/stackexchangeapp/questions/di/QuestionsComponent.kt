@@ -17,8 +17,6 @@ internal interface QuestionsComponent {
 
     val questionsNavigation: QuestionsNavigation
 
-    val questionsPagingAdapter: QuestionsPagingAdapter
-
     val viewModelFactory: QuestionsSearchViewModelFactory
 
     fun inject(fragment: QuestionsSearchFragment)
@@ -42,7 +40,7 @@ internal class QuestionsModule internal constructor(
 
     private val questionsLivePagedListFactory: QuestionsLivePagedListFactory = QuestionsLivePagedListFactory(getQuestionsUseCase, config)
 
-    override val questionsPagingAdapter: QuestionsPagingAdapter = QuestionsPagingAdapter()
+    private val questionsPagingAdapter: QuestionsPagingAdapter = QuestionsPagingAdapter()
 
     override val viewModelFactory: QuestionsSearchViewModelFactory =
         QuestionsSearchViewModelFactory(
@@ -52,6 +50,7 @@ internal class QuestionsModule internal constructor(
         )
 
     override fun inject(fragment: QuestionsSearchFragment) {
+        fragment.viewModelFactory = viewModelFactory
         fragment.adapter = questionsPagingAdapter
     }
 }

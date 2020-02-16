@@ -2,21 +2,23 @@ package com.github.emilg1101.stackexcahnge.questiondetails.ui.question
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.github.emilg1101.stackexcahnge.questiondetails.model.QuestionDetailsModelMapper
-import com.github.emilg1101.stackexcahnge.questiondetails.paging.DataSourceStateCallback
 import com.github.emilg1101.stackexcahnge.questiondetails.paging.AnswersLivePagedListFactory
+import com.github.emilg1101.stackexcahnge.questiondetails.paging.DataSourceStateCallback
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseViewModel
-import com.github.emilg1101.stackexchangeapp.domain.repository.QuestionsRepository
+import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 
 class QuestionDetailsViewModel internal constructor(
-    private val questionsRepository: QuestionsRepository,
+    private val getQuestionUseCase: GetQuestionUseCase,
     private val navigation: QuestionDetailsNavigation,
     private val livePagedListFactory: AnswersLivePagedListFactory
 ) : BaseViewModel(), DataSourceStateCallback {
@@ -30,7 +32,7 @@ class QuestionDetailsViewModel internal constructor(
 
     val questionDetails = _questionId.switchMap { id ->
         viewModelScope.async {
-            questionsRepository.getQuestion(id)
+            getQuestionUseCase(GetQuestionUseCase.Params(id))
                 .map(QuestionDetailsModelMapper)
                 .onCompletion { _progress.value = false }
                 .catch { _snackbar.value = it.message }
@@ -73,4 +75,19 @@ class QuestionDetailsViewModel internal constructor(
     fun openAnswerDetails(answerId: Int) {
         navigation.openAnswer(answerId)
     }
+}
+
+class QuestionDetailsViewModelFactory(
+    private val getQuestionUseCase: GetQuestionUseCase,
+    private val navigation: QuestionDetailsNavigation,
+    private val livePagedListFactory: AnswersLivePagedListFactory
+) : ViewModelProvider.NewInstanceFactory() {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+        QuestionDetailsViewModel(
+            getQuestionUseCase,
+            navigation,
+            livePagedListFactory
+        ) as T
 }
