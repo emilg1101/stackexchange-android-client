@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
@@ -43,13 +45,12 @@ dependencies {
     implementation project(':app-core')
     api project(':data')
 
-    implementation project(':feature-questions')
-    implementation project(':feature-questiondetails')
-    implementation project(':feature-profiledetails')
-    implementation project(':feature-authorization')
-    implementation project(':feature-notifications')
+    implementation project(':features:feature-questions')
+    implementation project(':features:feature-questiondetails')
+    implementation project(':features:feature-profiledetails')
+    implementation project(':features:feature-authorization')
+    implementation project(':features:feature-notifications')
 
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation testLibs
+    androidTestImplementation androidTestLibs
 }
