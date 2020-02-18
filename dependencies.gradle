@@ -30,7 +30,6 @@ ext {
     retrofitVersion = '2.7.1'
     gsonVersion = '2.8.6'
     loggingVersion = '4.3.1'
-    txtmarkVersion = '0.16'
     webkitVersion = '1.2.0-alpha01'
 
     deps = [
@@ -79,10 +78,6 @@ ext {
             "com.squareup.retrofit2:converter-gson:$retrofitGsonVersion",
             "com.squareup.retrofit2:retrofit:$retrofitVersion",
             "com.squareup.okhttp3:logging-interceptor:$loggingVersion"
-    ]
-
-    markdown_libraries = [
-            "es.nitaur.markdown:txtmark:$txtmarkVersion"
     ]
 
     testLibs = [

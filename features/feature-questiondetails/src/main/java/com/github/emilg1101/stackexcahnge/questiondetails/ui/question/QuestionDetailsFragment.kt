@@ -1,11 +1,11 @@
 package com.github.emilg1101.stackexcahnge.questiondetails.ui.question
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_question_details.answers_list
 import kotlinx.android.synthetic.main.fragment_question_details.scroll
 import kotlinx.android.synthetic.main.fragment_question_details.text_title
 import kotlinx.android.synthetic.main.fragment_question_details.text_toolbar_title
-import kotlinx.android.synthetic.main.fragment_question_details.toolbar
 
 class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.layout.fragment_question_details) {
 
@@ -28,6 +27,9 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
     override val viewModel: QuestionDetailsViewModel by viewModels { viewModelFactory }
 
     lateinit var adapter: AnswersPagingAdapter
+
+    override val toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         questionDetailsComponent.inject(this)
@@ -41,14 +43,15 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding.viewmodel = viewModel
+        /*binding.answersList.doOnApplyWindowInsets { v, insets, padding ->
+            v.updatePaddingRelative(bottom = padding.bottom + insets.systemWindowInsetBottom)
+        }*/
         return binding.root
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setQuestionId(questionId)
-        setToolbar(toolbar)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayShowTitleEnabled(false)
 
         answers_list.layoutManager = LinearLayoutManager(requireContext())
@@ -72,7 +75,7 @@ class QuestionDetailsFragment : BaseFragment<FragmentQuestionDetailsBinding>(R.l
         super.onLayout(view, savedInstanceState)
 
         val toolbarLocation = IntArray(2)
-        toolbar.getLocationInWindow(toolbarLocation)
+        toolbar?.getLocationInWindow(toolbarLocation)
 
         val toolbarTitleLocation = IntArray(2)
         text_toolbar_title.getLocationInWindow(toolbarTitleLocation)

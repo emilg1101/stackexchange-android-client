@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,6 @@ import com.github.emilg1101.stackexcahnge.questiondetails.adapter.CommentsPaging
 import com.github.emilg1101.stackexcahnge.questiondetails.databinding.FragmentAnswerDetailsBinding
 import com.github.emilg1101.stackexcahnge.questiondetails.di.answerDetailsComponent
 import com.github.emilg1101.stackexchangeapp.core.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_answer_details.toolbar
 import kotlinx.android.synthetic.main.fragment_comments.comment_list
 
 class AnswerDetailsFragment : BaseFragment<FragmentAnswerDetailsBinding>(R.layout.fragment_answer_details) {
@@ -22,6 +22,9 @@ class AnswerDetailsFragment : BaseFragment<FragmentAnswerDetailsBinding>(R.layou
     override val viewModel: AnswerDetailsViewModel by viewModels { viewModelFactory }
 
     lateinit var adapter: CommentsPagingAdapter
+
+    override val toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         answerDetailsComponent.inject(this)
@@ -36,7 +39,7 @@ class AnswerDetailsFragment : BaseFragment<FragmentAnswerDetailsBinding>(R.layou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolbar(toolbar)
+
         viewModel.setAnswerId(answerId)
 
         comment_list.layoutManager = LinearLayoutManager(context)

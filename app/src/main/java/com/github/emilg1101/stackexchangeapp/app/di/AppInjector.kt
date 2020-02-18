@@ -10,7 +10,6 @@ import com.github.emilg1101.stackexcahnge.questiondetails.di.questionDetailsFeat
 import com.github.emilg1101.stackexcahnge.questiondetails.ui.question.QuestionDetailsNavigation
 import com.github.emilg1101.stackexchangeapp.app.di.module.AuthorizationModule
 import com.github.emilg1101.stackexchangeapp.app.di.module.NotificationsModule
-import com.github.emilg1101.stackexchangeapp.app.di.module.ProfileDetailsModule
 import com.github.emilg1101.stackexchangeapp.app.ui.main.MainComponent
 import com.github.emilg1101.stackexchangeapp.authorization.di.AuthorizationComponent
 import com.github.emilg1101.stackexchangeapp.data.di.DataComponent
@@ -21,8 +20,10 @@ import com.github.emilg1101.stackexchangeapp.domain.usecase.comments.GetComments
 import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionUseCase
 import com.github.emilg1101.stackexchangeapp.domain.usecase.questions.GetQuestionsUseCase
 import com.github.emilg1101.stackexchangeapp.domain.usecase.tags.GetPopularTagsUseCase
+import com.github.emilg1101.stackexchangeapp.domain.usecase.users.GetUserUseCase
 import com.github.emilg1101.stackexchangeapp.notifications.di.NotificationsComponent
-import com.github.emilg1101.stackexchangeapp.profiledetails.di.ProfileDetailsComponent
+import com.github.emilg1101.stackexchangeapp.profiledetails.di.ProfileDetailsFeature
+import com.github.emilg1101.stackexchangeapp.profiledetails.di.profileDetailsFeature
 import com.github.emilg1101.stackexchangeapp.questions.di.QuestionsFeature
 import com.github.emilg1101.stackexchangeapp.questions.di.questionsFeature
 import com.github.emilg1101.stackexchangeapp.questions.ui.QuestionsNavigation
@@ -55,7 +56,10 @@ object AppInjector {
             override val getQuestionUseCase: GetQuestionUseCase
                 get() = GetQuestionUseCase(questionsRepository)
         })
-        ProfileDetailsComponent.instance = ProfileDetailsModule()
+        profileDetailsFeature.inject(object : ProfileDetailsFeature.Dependencies, RepositoryComponent by dataComponent.repositoryComponent {
+            override val getUserUseCase: GetUserUseCase
+                get() = GetUserUseCase(userRepository)
+        })
         AuthorizationComponent.instance = AuthorizationModule(mainComponent)
         NotificationsComponent.instance = NotificationsModule()
 

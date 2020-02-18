@@ -1,15 +1,24 @@
 package com.github.emilg1101.stackexchangeapp.profiledetails.di
 
+import com.github.emilg1101.stackexchangeapp.domain.usecase.users.GetUserUseCase
+import com.github.emilg1101.stackexchangeapp.profiledetails.ui.ProfileDetailsFragment
 import com.github.emilg1101.stackexchangeapp.profiledetails.ui.ProfileDetailsViewModelFactory
 
-val ProfileDetailsComponentProvider = ProfileDetailsComponent.instance
+internal interface ProfileDetailsComponent {
 
-abstract class ProfileDetailsComponent {
-
-    fun provideProfileDetailsViewModelFactory() =
-        ProfileDetailsViewModelFactory()
+    fun inject(fragment: ProfileDetailsFragment)
 
     companion object {
-        lateinit var instance: ProfileDetailsComponent
+        fun create(dependencies: ProfileDetailsFeature.Dependencies): ProfileDetailsComponent =
+            ProfileDetailsModule(dependencies.getUserUseCase)
+    }
+}
+
+private class ProfileDetailsModule internal constructor(getUserUseCase: GetUserUseCase) : ProfileDetailsComponent {
+
+    val viewModelFactory: ProfileDetailsViewModelFactory = ProfileDetailsViewModelFactory(getUserUseCase)
+
+    override fun inject(fragment: ProfileDetailsFragment) {
+        fragment.viewModelFactory = viewModelFactory
     }
 }

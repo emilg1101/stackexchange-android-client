@@ -1,5 +1,6 @@
 package com.github.emilg1101.stackexchangeapp.core.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,10 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
 
     protected abstract val viewModel: BaseViewModel
 
+    private var navigationHost: NavigationHost? = null
+
+    open val toolbar: Toolbar? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +41,13 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        navigationHost?.let { host ->
+            toolbar?.let {
+                host.registerToolbarWithNavigation(it)
+            }
+        }
+
         view.doOnLayout { onLayout(it, savedInstanceState) }
         viewModel.snackbar.observe(viewLifecycleOwner) { text ->
             text?.let {
@@ -44,9 +56,17 @@ abstract class BaseFragment<Binding : ViewDataBinding>(private val containerId: 
         }
     }
 
-    fun setToolbar(toolbar: Toolbar) {
-        (activity as? AppActivity)?.setToolbar(toolbar)
+    open fun onLayout(view: View, savedInstanceState: Bundle?) {}
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is NavigationHost) {
+            navigationHost = context
+        }
     }
 
-    open fun onLayout(view: View, savedInstanceState: Bundle?) {}
+    override fun onDetach() {
+        super.onDetach()
+        navigationHost = null
+    }
 }

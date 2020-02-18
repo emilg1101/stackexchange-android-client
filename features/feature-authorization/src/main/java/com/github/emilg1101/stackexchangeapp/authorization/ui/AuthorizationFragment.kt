@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,9 @@ class AuthorizationFragment : BaseFragment<FragmentAuthorizationBinding>(R.layou
         AuthorizationComponentProvider.provideAuthorizationViewModelFactory()
     }
 
+    override val toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,7 +35,7 @@ class AuthorizationFragment : BaseFragment<FragmentAuthorizationBinding>(R.layou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolbar(toolbar)
+        // setToolbar(toolbar)
         button_signin.setOnClickListener { viewModel.openProfileDetails() }
     }
 }

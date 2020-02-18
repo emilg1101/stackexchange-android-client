@@ -30,7 +30,7 @@ data class Question(
 val QuestionEntityMapper: (ApiQuestion) -> Question = { entity ->
     Question(
         entity.questionId,
-        OwnerEntityMapper(entity.owner),
+        UserEntityMapper(entity.owner),
         entity.title,
         entity.answerCount,
         entity.creationDate.toCalendar()

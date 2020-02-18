@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import com.github.emilg1101.stackexcahnge.questiondetails.databinding.FragmentCo
 import com.github.emilg1101.stackexcahnge.questiondetails.di.commentsComponent
 import com.github.emilg1101.stackexchangeapp.core.ui.base.NestedFragment
 import kotlinx.android.synthetic.main.fragment_comments.comment_list
-import kotlinx.android.synthetic.main.fragment_comments.toolbar
 
 class CommentsFragment : NestedFragment<FragmentCommentsBinding>(R.layout.fragment_comments) {
 
@@ -22,6 +22,9 @@ class CommentsFragment : NestedFragment<FragmentCommentsBinding>(R.layout.fragme
     override val viewModel: CommentsViewModel by viewModels { viewModelFactory }
 
     lateinit var adapter: CommentsPagingAdapter
+
+    override val toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         commentsComponent.inject(this)
@@ -37,7 +40,6 @@ class CommentsFragment : NestedFragment<FragmentCommentsBinding>(R.layout.fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setPostId(postId)
-        setToolbar(toolbar)
 
         comment_list.layoutManager = LinearLayoutManager(context)
         comment_list.adapter = adapter

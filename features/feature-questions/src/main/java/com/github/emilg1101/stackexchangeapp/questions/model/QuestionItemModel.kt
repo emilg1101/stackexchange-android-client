@@ -6,6 +6,7 @@ import java.util.Calendar
 data class QuestionItemModel(
     val questionId: Int,
     val title: String,
+    val ownerId: Int,
     val ownerImage: String,
     val ownerName: String,
     val tags: List<String>,
@@ -17,6 +18,7 @@ val QuestionItemModelsMapper: suspend (List<Question>) -> List<QuestionItemModel
         QuestionItemModel(
             question.id,
             question.title,
+            question.owner.id,
             question.owner.profileImage,
             question.owner.name,
             question.tags,

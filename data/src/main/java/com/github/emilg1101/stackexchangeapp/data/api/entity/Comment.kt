@@ -21,7 +21,7 @@ val CommentEntityMapper: ApiComment.() -> Comment = {
     Comment(
         id,
         body,
-        OwnerEntityMapper(owner),
+        UserEntityMapper(owner),
         creationDate.toCalendar()
     )
 }

@@ -27,4 +27,8 @@ class MainNavigator : QuestionsNavigation, AuthorizationNavigation,
     override fun openAnswer(answerId: Int) {
         navController?.navigate(R.id.action_questionDetails_to_answerDetailsFragment, bundleOf("ANSWER_ID" to answerId))
     }
+
+    override fun openUserProfile(userId: Int) {
+        navController?.navigate(R.id.profileDetails, bundleOf("USER_ID" to userId))
+    }
 }

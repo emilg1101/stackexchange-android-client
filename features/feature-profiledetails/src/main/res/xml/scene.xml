@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000"
+        motion:motionInterpolator="linear" />
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@id/background"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <!--<Constraint
+            android:id="@id/scrimStatus"
+            android:layout_height="24dp"/>-->
+
+        <Constraint
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@id/background">
+            <CustomAttribute
+                motion:attributeName="android:background"
+                motion:customColorValue="@android:color/transparent"/>
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <!--<Constraint
+            android:id="@id/scrimStatus"
+            android:layout_height="24dp"/>-->
+
+        <Constraint
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@id/background"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:visibility="visible">
+            <CustomAttribute
+                motion:attributeName="android:background"
+                motion:customColorValue="@color/colorPrimary"/>
+        </Constraint>
+
+    </ConstraintSet>
+</MotionScene>

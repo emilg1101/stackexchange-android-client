@@ -17,4 +17,6 @@
 
     <color name="colorChipPrimary">#eff1f4</color>
     <color name="colorChipPrimaryChecked">#d7d8db</color>
+
+    <color name="transparent">#0fff</color>
 </resources>

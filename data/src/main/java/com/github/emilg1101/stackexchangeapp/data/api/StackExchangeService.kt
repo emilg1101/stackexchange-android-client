@@ -5,6 +5,7 @@ import com.github.emilg1101.stackexchangeapp.data.api.entity.Comment
 import com.github.emilg1101.stackexchangeapp.data.api.entity.Question
 import com.github.emilg1101.stackexchangeapp.data.api.entity.ResponseWrapper
 import com.github.emilg1101.stackexchangeapp.data.api.entity.Tag
+import com.github.emilg1101.stackexchangeapp.data.api.entity.User
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -61,4 +62,10 @@ interface StackExchangeService {
         @Path("answerId") answerId: Int,
         @Query("site") site: String = "stackoverflow"
     ): Flow<ResponseWrapper<Answer>>
+
+    @GET("2.2/users/{userId}?filter=!3ykawN*7Hu(G7tpx*&$ACCESS_TOKEN")
+    fun getUserById(
+        @Path("userId") userId: Int,
+        @Query("site") site: String = "stackoverflow"
+    ): Flow<ResponseWrapper<User>>
 }

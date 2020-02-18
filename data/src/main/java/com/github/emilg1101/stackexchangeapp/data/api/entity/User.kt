@@ -1,7 +1,10 @@
 package com.github.emilg1101.stackexchangeapp.data.api.entity
 
-import com.github.emilg1101.stackexchangeapp.domain.entity.Owner
+import com.github.emilg1101.stackexchangeapp.domain.entity.User
+import com.github.emilg1101.stackexchangeapp.domain.exceptions.UserNotFoundException
 import com.google.gson.annotations.SerializedName
+
+typealias ApiUser = com.github.emilg1101.stackexchangeapp.data.api.entity.User
 
 data class User(
     @field:SerializedName("about_me")
@@ -62,6 +65,10 @@ data class User(
     val websiteUrl: String?
 )
 
-val OwnerEntityMapper: User.() -> Owner = {
-    Owner(profileImage ?: "", displayName ?: "")
+val UserEntityMapper: ApiUser.() -> User = {
+    User(userId ?: 0, profileImage ?: "", displayName ?: "")
+}
+
+val UserResultEntityMapper: suspend ResponseWrapper<ApiUser>.() -> User = {
+    items.map(UserEntityMapper).firstOrNull() ?: throw UserNotFoundException()
 }

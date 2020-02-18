@@ -5,7 +5,7 @@ import java.util.Calendar
 class Answer(
     val id: Int,
     val questionId: Int,
-    val owner: Owner,
+    val owner: User,
     val accepted: Boolean,
     val commentCount: Int,
     val upVoteCount: Int,

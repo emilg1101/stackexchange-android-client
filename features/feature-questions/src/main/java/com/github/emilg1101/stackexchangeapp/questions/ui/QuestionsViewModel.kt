@@ -118,6 +118,10 @@ class QuestionsViewModel internal constructor(
     fun openQuestion(model: QuestionItemModel) {
         questionsNavigation.openQuestionDetails(model.questionId)
     }
+
+    fun openProfile(model: QuestionItemModel) {
+        questionsNavigation.openUserProfile(model.ownerId)
+    }
 }
 
 class QuestionsSearchViewModelFactory internal constructor(

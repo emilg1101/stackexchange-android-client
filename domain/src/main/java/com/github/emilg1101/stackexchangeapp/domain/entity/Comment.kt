@@ -5,6 +5,6 @@ import java.util.Calendar
 class Comment(
     val id: Int,
     val body: String,
-    val owner: Owner,
+    val owner: User,
     val creationDate: Calendar
 )

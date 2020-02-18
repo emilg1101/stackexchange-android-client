@@ -35,5 +35,10 @@
         android:id="@+id/answerDetailsFragment"
         android:name="com.github.emilg1101.stackexcahnge.questiondetails.ui.answer.AnswerDetailsFragment"
         android:label="Answer"
-        tools:layout="@layout/fragment_answer_details"/>
+        tools:layout="@layout/fragment_answer_details" />
+    <fragment
+        android:id="@+id/profileDetails"
+        android:name="com.github.emilg1101.stackexchangeapp.profiledetails.ui.ProfileDetailsFragment"
+        android:label="Profile Details"
+        tools:layout="@layout/fragment_profile_details" />
 </navigation>

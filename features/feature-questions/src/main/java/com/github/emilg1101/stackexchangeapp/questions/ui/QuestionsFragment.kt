@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_questions.chip_filter
 import kotlinx.android.synthetic.main.fragment_questions.chip_sort
 import kotlinx.android.synthetic.main.fragment_questions.list
 import kotlinx.android.synthetic.main.fragment_questions.tags_group
-import kotlinx.android.synthetic.main.fragment_questions.toolbar
 
 class QuestionsSearchFragment :
     BaseFragment<FragmentQuestionsBinding>(R.layout.fragment_questions) {
@@ -31,6 +31,9 @@ class QuestionsSearchFragment :
     lateinit var adapter: QuestionsPagingAdapter
 
     override val viewModel: QuestionsViewModel by viewModels { viewModelFactory }
+
+    override val toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         questionsComponent.inject(this)
@@ -52,13 +55,14 @@ class QuestionsSearchFragment :
 
         val sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
-        setToolbar(toolbar)
-
         adapter.onQuestionClick = {
             viewModel.openQuestion(it)
         }
         adapter.onTagClick = {
             viewModel.addTag(it)
+        }
+        adapter.onProfileClick = {
+            viewModel.openProfile(it)
         }
 
         list.layoutManager = LinearLayoutManager(requireContext())
@@ -66,9 +70,9 @@ class QuestionsSearchFragment :
 
         chip_filter.setOnClickListener {
             if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+                sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             } else {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 

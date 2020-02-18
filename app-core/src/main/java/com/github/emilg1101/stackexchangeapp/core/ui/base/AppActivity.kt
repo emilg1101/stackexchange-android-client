@@ -3,15 +3,14 @@ package com.github.emilg1101.stackexchangeapp.core.ui.base
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 
-abstract class AppActivity : AppCompatActivity() {
+abstract class AppActivity : AppCompatActivity(), NavigationHost {
 
     var navController: NavController? = null
 
-    fun setToolbar(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
+    override fun registerToolbarWithNavigation(toolbar: Toolbar) {
         toolbar.setNavigationOnClickListener { navController?.popBackStack() }
-        navController?.let { setupActionBarWithNavController(it) }
+        navController?.let { toolbar.setupWithNavController(it) }
     }
 }

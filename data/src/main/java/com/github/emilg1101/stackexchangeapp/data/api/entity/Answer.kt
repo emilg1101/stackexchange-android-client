@@ -32,7 +32,7 @@ val AnswerEntityMapper: (ApiAnswer) -> Answer = { entity ->
     Answer(
         entity.answerId,
         entity.questionId,
-        OwnerEntityMapper(entity.owner),
+        UserEntityMapper(entity.owner),
         entity.isAccepted,
         entity.commentCount,
         entity.upVoteCount,

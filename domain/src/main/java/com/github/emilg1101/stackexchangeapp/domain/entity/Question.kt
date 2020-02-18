@@ -4,7 +4,7 @@ import java.util.Calendar
 
 class Question(
     val id: Int,
-    val owner: Owner,
+    val owner: User,
     val title: String,
     val answerCount: Int,
     val date: Calendar

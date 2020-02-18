@@ -18,6 +18,7 @@ class QuestionsPagingAdapter :
 
     var onQuestionClick: ((QuestionItemModel) -> Unit)? = null
     var onTagClick: ((String) -> Unit)? = null
+    var onProfileClick: ((QuestionItemModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionItemViewHolder {
         val binding = DataBindingUtil.inflate<ItemQuestionBinding>(LayoutInflater.from(parent.context), R.layout.item_question, parent, false)
@@ -36,7 +37,7 @@ class QuestionsPagingAdapter :
                     onTagClick?.invoke(text)
                 }
             }
-            profile.setOnClickListener {}
+            profile.setOnClickListener { item?.let { onProfileClick?.invoke(it) } }
             root.setOnClickListener { item?.let { onQuestionClick?.invoke(it) } }
         }
     }
